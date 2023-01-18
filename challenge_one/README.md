@@ -1,8 +1,8 @@
-# Large Tether Transfer Agent
+# Nethermind Bot Deploy and Update Monitor
 
 ## Description
 
-This agent detects transactions with large Tether transfers
+This agent detects when the Nethermind 
 
 ## Supported Chains
 
