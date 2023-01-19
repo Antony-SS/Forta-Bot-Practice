@@ -20,7 +20,7 @@ export const provideHandleTransaction =
   async (txEvent: TransactionEvent): Promise<Finding[]> => {
     const findings: Finding[] = [];
 
-    if (NETHERMIND_FORTA_ADDRESS === txEvent.from) {
+    if (NETHERMIND_FORTA_ADDRESS.toLowerCase() !== txEvent.from) {
       return findings;
     }
 
