@@ -2,25 +2,22 @@
 
 ## Description
 
-This agent detects when the Nethermind 
+This agent detects when Nethermind deploys or updates a Forta Bot
 
 ## Supported Chains
 
-- Ethereum
-- List any other chains this agent can support e.g. BSC
+- Polygon
 
 ## Alerts
 
-Describe each of the type of alerts fired by this agent
+- FORTA-BOT-UPDATE
+  - Fired when a transaction comes from Nethermind's wallet address that contains the agentUpdate function call
 
-- FORTA-1
-  - Fired when a transaction contains a Tether transfer over 10,000 USDT
-  - Severity is always set to "low" (mention any conditions where it could be something else)
-  - Type is always set to "info" (mention any conditions where it could be something else)
-  - Mention any other type of metadata fields included with this alert
+- FORTA-BOT-CREATE
+  - Fired when a transcation comes from Netherminds wallet address that contains the createAgent function call
 
 ## Test Data
 
 The agent behaviour can be verified with the following transactions:
 
-- 0x3a0f757030beec55c22cbc545dd8a844cbbb2e6019461769e1bc3f3a95d10826 (15,000 USDT)
+- 0x72482c5bddd5ee333e177caf8cd4056a8eee83b74cdcc4218b8fa707854e66f4 (bot creation with id: 64235728982376409709439139978057092858568305508934039865220382119682812608133)
