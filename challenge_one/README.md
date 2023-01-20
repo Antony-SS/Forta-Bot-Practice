@@ -2,7 +2,7 @@
 
 ## Description
 
-This agent detects when Nethermind deploys or updates a Forta Bot
+This bot detects when Nethermind deploys or updates a Forta Bot
 
 ## Supported Chains
 
