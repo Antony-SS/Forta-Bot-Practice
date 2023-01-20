@@ -63,7 +63,7 @@ export const provideHandleTransaction =
         Finding.fromObject({
           name: "Nethermind Bot Creation",
           description: `Nethermind botId: ${agentId} was created by owner ${owner}`,
-          alertId: "FORTA-BOT-UPDATE",
+          alertId: "FORTA-BOT-CREATE",
           severity: FindingSeverity.Info,
           type: FindingType.Info,
           metadata: {
