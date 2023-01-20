@@ -18,6 +18,6 @@ This bot detects when Nethermind deploys or updates a Forta Bot
 
 ## Test Data
 
-The agent behaviour can be verified with the following transactions:
+The bot behaviour can be verified with the following transaction:
 
 - 0x72482c5bddd5ee333e177caf8cd4056a8eee83b74cdcc4218b8fa707854e66f4 (bot creation with id: 64235728982376409709439139978057092858568305508934039865220382119682812608133)
