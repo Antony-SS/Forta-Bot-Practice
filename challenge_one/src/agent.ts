@@ -15,12 +15,14 @@ export const UPDATE_AGENT_FUNCTION: string =
 export const CREATE_AGENT_FUNCTION: string =
   "function createAgent(uint256 agentId,address owner,string metadata,uint256[] chainIds)";
 
+export const FORTA_CONTRACT_ADDRESS: string = "0x61447385B019187daa48e91c55c02AF1F1f3F863";
+
 export const provideHandleTransaction =
   (): HandleTransaction =>
   async (txEvent: TransactionEvent): Promise<Finding[]> => {
     const findings: Finding[] = [];
 
-    if (NETHERMIND_FORTA_ADDRESS.toLowerCase() !== txEvent.from) {
+    if (NETHERMIND_FORTA_ADDRESS.toLowerCase() !== txEvent.from.toLowerCase()) {
       return findings;
     }
 

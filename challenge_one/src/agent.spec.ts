@@ -97,6 +97,7 @@ describe("Nethermind deployer address monitor teste suite", () => {
       .setFrom("0x262Fb24645cf0Dd8D0f35f415eB75417BF639666")
       .setData(callData);
     const findings = await handleTransaction(mockTxEvent);
+    console.log(findings[0])
     expect(findings[0]).toStrictEqual(updateBotFinding);
   });
 });
