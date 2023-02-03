@@ -17,7 +17,7 @@ This bot detects when Nethermind deploys or updates a Forta Bot
   - Metadata: Bot-ID number
 
 - FORTA-BOT-CREATE
-  - Fired when a transcation comes from Netherminds wallet address that contains the createAgent function call
+  - Fired when a transcation comes from Nethermind's wallet address that contains the createAgent function call
   - Severity: Info
   - Type: Info
   - Metadata: Bot-ID number
