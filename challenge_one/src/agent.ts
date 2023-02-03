@@ -15,7 +15,8 @@ export const UPDATE_AGENT_FUNCTION: string =
 export const CREATE_AGENT_FUNCTION: string =
   "function createAgent(uint256 agentId,address owner,string metadata,uint256[] chainIds)";
 
-export const FORTA_CONTRACT_ADDRESS: string = "0x61447385B019187daa48e91c55c02AF1F1f3F863";
+export const FORTA_CONTRACT_ADDRESS: string =
+  "0x61447385B019187daa48e91c55c02AF1F1f3F863";
 
 export const provideHandleTransaction =
   (): HandleTransaction =>
@@ -28,12 +29,12 @@ export const provideHandleTransaction =
 
     // filter the transaction logs for Bot Update Function call
     const nethermindBotUpdatesCalls = txEvent.filterFunction(
-      UPDATE_AGENT_FUNCTION
+      UPDATE_AGENT_FUNCTION, FORTA_CONTRACT_ADDRESS.toLowerCase()
     );
 
     // filter the transaction logs for Bot Create Function call
     const nethermindCreateBotCalls = txEvent.filterFunction(
-      CREATE_AGENT_FUNCTION
+      CREATE_AGENT_FUNCTION, FORTA_CONTRACT_ADDRESS
     );
 
     nethermindBotUpdatesCalls.forEach((botUpdateFunction) => {

@@ -8,7 +8,7 @@ import {
 
 import { TestTransactionEvent } from "forta-agent-tools/lib/test";
 
-import agent, { NETHERMIND_FORTA_ADDRESS } from "./agent";
+import agent, { FORTA_CONTRACT_ADDRESS, NETHERMIND_FORTA_ADDRESS } from "./agent";
 
 import { BigNumber } from "bignumber.js";
 
@@ -46,10 +46,39 @@ describe("Nethermind deployer address monitor teste suite", () => {
     expect(findings).toStrictEqual([]);
   });
 
-  it("Should return empty findings if no transaction from Nethermind deployer address is found", async () => {
-    const mockTxEvent: TransactionEvent = new TestTransactionEvent().setFrom(
-      "0x262Fb24645cf0Dd8D0f35f415eB75417BF639666"
+  it("Should return empty findings for update/create bot function calls from Nethermind, not to Forta address", async () => {
+    
+    const mockChainIds = [new BigNumber(1)];
+
+    const callData = web3.eth.abi.encodeFunctionCall(
+      {
+        name: "updateAgent",
+        type: "function",
+        inputs: [
+          {
+            type: "uint256",
+            name: "agentId",
+          },
+          {
+            type: "string",
+            name: "metadata",
+          },
+          {
+            type: "uint256[]",
+            name: "chainIds",
+          },
+        ],
+      },
+      [
+        "64235728982376409709439139978057092858568305508934039865220382119682812608133",
+        "QmSJSRECkgCzRBeoASCgZ4XpxPmwNCUgfLQ41o27pYcZiK",
+        mockChainIds,
+      ]
     );
+
+    const mockTxEvent: TransactionEvent = new TestTransactionEvent()
+      .setFrom(NETHERMIND_FORTA_ADDRESS)
+      .setData(callData);
 
     const findings = await handleTransaction(mockTxEvent);
     expect(findings).toStrictEqual([]);
@@ -94,10 +123,11 @@ describe("Nethermind deployer address monitor teste suite", () => {
     );
 
     const mockTxEvent: TransactionEvent = new TestTransactionEvent()
-      .setFrom("0x262Fb24645cf0Dd8D0f35f415eB75417BF639666")
-      .setData(callData);
+      .setFrom(NETHERMIND_FORTA_ADDRESS)
+      .setData(callData)
+      .setTo(FORTA_CONTRACT_ADDRESS);
     const findings = await handleTransaction(mockTxEvent);
-    console.log(findings[0])
+    console.log(findings[0]);
     expect(findings[0]).toStrictEqual(updateBotFinding);
   });
 });
