@@ -2,6 +2,7 @@
   "name": "nethermind-bot-deploy-and-update-monitor",
   "version": "0.0.1",
   "description": "Antony's First Practice Bot!",
+  "repository": "https://github.com/Antony-SS/forta-bot-practice",
   "chainIds": [
     137
   ],
