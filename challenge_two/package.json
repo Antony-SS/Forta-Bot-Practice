@@ -1,7 +1,7 @@
 {
-  "name": "forta-agent-starter",
+  "name": "antony-intern-challenge-two",
   "version": "0.0.1",
-  "description": "Forta Agent Typescript starter project",
+  "description": "Antony's second intern challenge for Nethermind",
   "repository": "https://github.com/forta-network/forta-bot-sdk/tree/master/starter-project",
   "chainIds": [
     1
@@ -24,16 +24,24 @@
     "disable": "forta-agent disable",
     "enable": "forta-agent enable",
     "keyfile": "forta-agent keyfile",
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "clear_jest": "jest --clearCache"
   },
   "dependencies": {
-    "forta-agent": "^0.1.18"
+    "@uniswap/sdk-core": "^3.1.1",
+    "@uniswap/v3-sdk": "^3.9.0",
+    "forta-agent": "^0.1.18",
+    "typescript-lru-cache": "^2.0.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@types/nodemon": "^1.19.0",
+    "big-number": "^2.0.0",
+    "forta-agent-tools": "^3.2.5",
     "jest": "^27.0.6",
     "nodemon": "^2.0.8",
+    "prettier": "^2.8.4",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.4"
   }

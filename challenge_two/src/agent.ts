@@ -1,83 +1,47 @@
 import {
-  BlockEvent,
   Finding,
-  Initialize,
-  HandleBlock,
   HandleTransaction,
-  HandleAlert,
-  AlertEvent,
   TransactionEvent,
-  FindingSeverity,
-  FindingType,
+  getJsonRpcUrl, ethers
 } from "forta-agent";
 
-export const ERC20_TRANSFER_EVENT =
-  "event Transfer(address indexed from, address indexed to, uint256 value)";
-export const TETHER_ADDRESS = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-export const TETHER_DECIMALS = 6;
-let findingsCount = 0;
 
-const handleTransaction: HandleTransaction = async (
-  txEvent: TransactionEvent
-) => {
-  const findings: Finding[] = [];
+import { SWAP_EVENT } from "./utils/constants";
+import { getPoolAddress } from "./utils/getPoolAddress";
+import { createFinding } from "./utils/createFinding";
 
-  // limiting this agent to emit only 5 findings so that the alert feed is not spammed
-  if (findingsCount >= 5) return findings;
 
-  // filter the transaction logs for Tether transfer events
-  const tetherTransferEvents = txEvent.filterLog(
-    ERC20_TRANSFER_EVENT,
-    TETHER_ADDRESS
-  );
 
-  tetherTransferEvents.forEach((transferEvent) => {
-    // extract transfer event arguments
-    const { to, from, value } = transferEvent.args;
-    // shift decimals of transfer value
-    const normalizedValue = value.div(10 ** TETHER_DECIMALS);
+export const provideHandleTransaction =
+  (provider: ethers.providers.JsonRpcProvider): HandleTransaction =>
+  async (txEvent: TransactionEvent): Promise<Finding[]> => {
+    const findings: Finding[] = [];
 
-    // if more than 10,000 Tether were transferred, report it
-    if (normalizedValue.gt(10000)) {
-      findings.push(
-        Finding.fromObject({
-          name: "High Tether Transfer",
-          description: `High amount of USDT transferred: ${normalizedValue}`,
-          alertId: "FORTA-1",
-          severity: FindingSeverity.Low,
-          type: FindingType.Info,
-          metadata: {
-            to,
-            from,
-          },
-        })
-      );
-      findingsCount++;
+    // filter only for emitted swap events
+    const swapEvents = txEvent.filterLog(SWAP_EVENT);
+
+    // now the hard part is making sure they are uniswap swaps only
+
+    // How do I make sure the swap calls are to Uniswap and not other protocols with the same function signature?
+
+    for (const swap of swapEvents) {
+      try {
+        const computedAddress = await getPoolAddress(swap.address, provider);
+   
+        if (computedAddress.toLowerCase() != swap.address.toLocaleLowerCase()) {
+          return findings;
+        }
+        findings.push(createFinding(swap.address));
+        return findings;
+      } catch (e) {
+      }
     }
-  });
 
-  return findings;
-};
-
-// const initialize: Initialize = async () => {
-//   // do some initialization on startup e.g. fetch data
-// }
-
-// const handleBlock: HandleBlock = async (blockEvent: BlockEvent) => {
-//   const findings: Finding[] = [];
-//   // detect some block condition
-//   return findings;
-// }
-
-// const handleAlert: HandleAlert = async (alertEvent: AlertEvent) => {
-//   const findings: Finding[] = [];
-//   // detect some alert condition
-//   return findings;
-// }
+    return findings;
+  };
 
 export default {
-  // initialize,
-  handleTransaction,
-  // handleBlock,
-  // handleAlert
+  handleTransaction: provideHandleTransaction(
+    new ethers.providers.JsonRpcProvider(getJsonRpcUrl())
+  ),
 };
