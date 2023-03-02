@@ -1,9 +1,8 @@
 import { LRUCache } from "typescript-lru-cache";
 import { computePoolAddress, FeeAmount } from "@uniswap/v3-sdk";
 import { Token } from "@uniswap/sdk-core";
-import { Contract } from "ethers";
 import { ethers } from "forta-agent";
-import { V3POOLIFACE, V3_FACTORY_ADDRESS } from "./constants";
+import { V3POOLABI, V3_FACTORY_ADDRESS } from "./constants";
 
 export type poolData = {
   token0: Token;
@@ -24,13 +23,15 @@ export const getPoolAddress = async (
   if (cache.has(poolAddress)) {
     poolData = cache.get(poolAddress) as poolData;
   } else {
-    const poolContract = new Contract(poolAddress, V3POOLIFACE, provider);
+    const poolContract = new ethers.Contract(poolAddress, V3POOLABI, provider);
+    
+    // for some reason, this is returned as the oppostie
     let token0 = new Token(1, await poolContract.token0(), 18);
     let token1 = new Token(1, await poolContract.token1(), 18);
     let fee = await poolContract.fee();
 
     cache.set(poolAddress, { token0, token1, fee } as poolData);
-    poolData = { token0, token1, fee } as poolData;
+    poolData = { token0: token0, token1: token1, fee: fee } as poolData;
   }
 
   try {
@@ -40,7 +41,7 @@ export const getPoolAddress = async (
       tokenB: poolData.token1,
       fee: poolData.fee,
     });
-    return computedAddress;
+    return {computedAddress, poolData};
   } catch (e) {
     throw e;
   }

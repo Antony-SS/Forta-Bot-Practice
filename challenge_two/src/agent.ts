@@ -2,7 +2,7 @@ import {
   Finding,
   HandleTransaction,
   TransactionEvent,
-  getJsonRpcUrl, ethers
+  ethers, getEthersProvider
 } from "forta-agent";
 
 
@@ -20,28 +20,30 @@ export const provideHandleTransaction =
     // filter only for emitted swap events
     const swapEvents = txEvent.filterLog(SWAP_EVENT);
 
-    // now the hard part is making sure they are uniswap swaps only
-
-    // How do I make sure the swap calls are to Uniswap and not other protocols with the same function signature?
-
     for (const swap of swapEvents) {
       try {
-        const computedAddress = await getPoolAddress(swap.address, provider);
+        const { computedAddress, poolData } = await getPoolAddress(swap.address, provider);
    
         if (computedAddress.toLowerCase() != swap.address.toLocaleLowerCase()) {
           return findings;
+        } else {
+          let metadata = {
+            token0: poolData.token0.address,
+            token1: poolData.token1.address,
+            amount0: swap.args.at(2),
+            amount1: swap.args.at(3)
+          }
+          findings.push(createFinding(swap.address, metadata));
         }
-        findings.push(createFinding(swap.address));
-        return findings;
       } catch (e) {
+
       }
     }
-
     return findings;
   };
 
 export default {
   handleTransaction: provideHandleTransaction(
-    new ethers.providers.JsonRpcProvider(getJsonRpcUrl())
+    (getEthersProvider())
   ),
 };
