@@ -1,5 +1,4 @@
 import { Finding, FindingSeverity, FindingType } from "forta-agent";
-import { poolData } from "./getPoolAddress";
 
 export const createFinding = (poolAddress: string, metadata: any) => {
   return Finding.fromObject({
